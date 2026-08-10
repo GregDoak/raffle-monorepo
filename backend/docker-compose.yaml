@@ -1,0 +1,28 @@
+services:
+    php:
+        restart: unless-stopped
+        build:
+            context: ./docker
+            dockerfile: ./php/php.Dockerfile
+        ports:
+            - ${HOST_BACKEND_PORT:-8000}:8000
+        volumes:
+            - ./application:/var/task
+            - ./application/var/cache:/tmp/cache:rw
+            - ./application/var/log:/tmp/log:rw
+            - ./docker/php/conf.d:/opt/bref/etc/php/conf.d
+        environment:
+            HANDLER: public/index.php
+            DOCUMENT_ROOT: public
+        user: ${DOCKER_USER:-1000:1000}
+        networks:
+            - backend
+            - shared
+
+networks:
+    backend:
+        name: backend
+        external: false
+    shared:
+        name: shared
+        external: true
