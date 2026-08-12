@@ -6,6 +6,10 @@ ifeq (,$(wildcard .env))
 $(shell cp .env.template .env)
 endif
 
+.PHONY: can-release
+can-release: ## Runs all checks required for release
+	@cd backend && ${MAKE} can-release
+
 .PHONY: destroy
 destroy: stop ## Destroys the local environment of the full stack
 	@${MAKE} -j2 shared/destroy backend/destroy
