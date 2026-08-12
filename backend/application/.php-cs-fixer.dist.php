@@ -36,5 +36,6 @@ return new PhpCsFixer\Config()
         'phpdoc_separation' => ['skip_unlisted_annotations' => true],
         'phpdoc_line_span' => ['method' => 'single', 'property' => 'single'],
         'php_unit_method_casing' => ['case' => 'snake_case'],
+        'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
     ])
     ->setFinder($finder);

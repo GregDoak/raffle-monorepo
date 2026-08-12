@@ -3,6 +3,10 @@ deptrac:
     paths:
         - ./src
     layers:
+        -   name: Foundation
+            collectors:
+                -   type: directory
+                    value: src/Foundation/
         -   name: Vendor
             collectors:
                 -   type: composer
@@ -11,3 +15,5 @@ deptrac:
                     packages:
                         - bref/symfony-bridge
     ruleset:
+        Foundation:
+            - Vendor
