@@ -7,6 +7,10 @@ deptrac:
             collectors:
                 -   type: directory
                     value: src/Foundation/
+        -   name: FrameworkDomain
+            collectors:
+                -   type: directory
+                    value: src/Framework/Domain/
         -   name: Vendor
             collectors:
                 -   type: composer
@@ -18,3 +22,5 @@ deptrac:
     ruleset:
         Foundation:
             - Vendor
+        FrameworkDomain:
+            - Foundation

@@ -2,3 +2,8 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+
+    _instanceof:
+        App\Framework\Domain\Projection\Projector:
+            tags:
+                - app.projector
