@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Framework;
 
 use Bref\SymfonyBridge\BrefKernel;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
