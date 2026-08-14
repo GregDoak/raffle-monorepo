@@ -14,6 +14,7 @@ services:
         environment:
             HANDLER: public/index.php
             DOCUMENT_ROOT: public
+            BASE_BACKEND_URL: ${BASE_BACKEND_URL}
         user: ${DOCKER_USER:-1000:1000}
         networks:
             - backend
