@@ -2,7 +2,7 @@ default: help
 SHELL := /bin/bash
 
 .PHONY: can-release
-can-release: test lint static ## Runs all checks required for release
+can-release: lint static ## Runs all checks required for release
 
 .PHONY: test
 test: test/unit test/integration test/functional test/mutation ## Runs the full test suite

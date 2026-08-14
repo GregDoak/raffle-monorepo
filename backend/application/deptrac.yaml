@@ -14,6 +14,7 @@ deptrac:
                     composerLockPath: composer.lock
                     packages:
                         - bref/symfony-bridge
+                        - symfony/uid
     ruleset:
         Foundation:
             - Vendor
