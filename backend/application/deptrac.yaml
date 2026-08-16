@@ -7,6 +7,14 @@ deptrac:
             collectors:
                 -   type: directory
                     value: src/Foundation/
+        -   name: FrameworkApplicationCommand
+            collectors:
+                -   type: directory
+                    value: src/Framework/Application/Command
+        -   name: FrameworkApplicationQuery
+            collectors:
+                -   type: directory
+                    value: src/Framework/Application/Query
         -   name: FrameworkDomain
             collectors:
                 -   type: directory
@@ -22,5 +30,11 @@ deptrac:
     ruleset:
         Foundation:
             - Vendor
+        FrameworkApplicationCommand:
+            - Foundation
+            - FrameworkDomain
+        FrameworkApplicationQuery:
+            - Foundation
+            - FrameworkDomain
         FrameworkDomain:
             - Foundation
