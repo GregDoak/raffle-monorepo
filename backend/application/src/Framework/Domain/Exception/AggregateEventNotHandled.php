@@ -8,7 +8,7 @@ use RuntimeException;
 
 use function sprintf;
 
-final class AggregateEventNotHandled extends RuntimeException
+final class AggregateEventNotHandled extends RuntimeException implements DomainException
 {
     public static function notHandledByAggregate(string $eventClassName, string $aggregateClassName): self
     {

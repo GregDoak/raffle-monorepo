@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace App\Framework\Application\Query\Exception;
 
+use App\Framework\Domain\Exception\AggregateNotFound;
 use RuntimeException;
-
-use function sprintf;
 
 final class ResourceNotFound extends RuntimeException implements QueryException
 {
-    private function __construct(string $id)
+    private function __construct(AggregateNotFound $exception)
     {
-        parent::__construct(sprintf('The requested id "%s" was not found.', $id));
+        parent::__construct($exception->getMessage(), previous: $exception);
     }
 
-    public static function fromId(string $id): self
+    public static function fromAggregateNotFound(AggregateNotFound $exception): self
     {
-        return new self($id);
+        return new self($exception);
     }
 }

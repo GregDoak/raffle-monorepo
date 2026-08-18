@@ -8,7 +8,7 @@ use RuntimeException;
 
 use function sprintf;
 
-final class InvalidAggregateVersion extends RuntimeException
+final class InvalidAggregateVersion extends RuntimeException implements DomainException
 {
     public static function fromInvalidVersion(int $version, string $className): self
     {

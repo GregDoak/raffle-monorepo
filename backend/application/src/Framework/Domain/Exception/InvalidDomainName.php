@@ -8,7 +8,7 @@ use RuntimeException;
 
 use function sprintf;
 
-final class InvalidDomainName extends RuntimeException
+final class InvalidDomainName extends RuntimeException implements DomainException
 {
     public static function fromEmptyName(string $className): self
     {

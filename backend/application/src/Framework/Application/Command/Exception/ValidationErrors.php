@@ -4,29 +4,22 @@ declare(strict_types=1);
 
 namespace App\Framework\Application\Command\Exception;
 
+use App\Framework\Domain\Exception\InvariantViolation;
 use RuntimeException;
+use Throwable;
 
 final class ValidationErrors extends RuntimeException implements CommandException
 {
-    /** @var string[] */
-    public readonly array $errors;
-
-    /** @param string[] $errors */
-    private function __construct(array $errors)
-    {
-        $this->errors = $errors;
-
-        parent::__construct('Validation failed');
+    /** @param array<string, string[]> $errors */
+    private function __construct(
+        public readonly array $errors,
+        Throwable $previous,
+    ) {
+        parent::__construct('Validation failed', previous: $previous);
     }
 
-    public static function fromError(string $error): self
+    public static function fromInvariantViolation(InvariantViolation $exception): self
     {
-        return new self([$error]);
-    }
-
-    /** @param string[] $errors */
-    public static function fromErrors(array $errors): self
-    {
-        return new self($errors);
+        return new self(errors: [$exception->subject => [$exception->getMessage()]], previous: $exception);
     }
 }

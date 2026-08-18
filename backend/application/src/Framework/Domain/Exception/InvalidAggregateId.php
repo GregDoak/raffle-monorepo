@@ -6,8 +6,8 @@ namespace App\Framework\Domain\Exception;
 
 final class InvalidAggregateId extends InvariantViolation
 {
-    public static function fromInvalidId(): self
+    public static function fromInvalidId(string $subject): self
     {
-        return self::fromMessage('The id is not a valid id.');
+        return self::fromSubjectAndMessage($subject, 'The id is not a valid id.');
     }
 }

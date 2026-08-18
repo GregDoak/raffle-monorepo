@@ -13,9 +13,11 @@ abstract readonly class AggregateId
         private string $id,
     ) {
         if (Uuid::isValid($id) === false) {
-            throw InvalidAggregateId::fromInvalidId();
+            throw InvalidAggregateId::fromInvalidId(static::getAggregateName()->toString());
         }
     }
+
+    abstract protected static function getAggregateName(): AggregateName;
 
     public static function fromNew(): static
     {

@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace App\Framework\Application\Command\Exception;
 
+use App\Framework\Domain\Exception\AggregateNotFound as DomainAggregateNotFound;
 use RuntimeException;
-
-use function sprintf;
 
 final class AggregateNotFound extends RuntimeException implements CommandException
 {
-    private function __construct(string $aggregateName, string $aggregateId)
+    private function __construct(DomainAggregateNotFound $exception)
     {
-        parent::__construct(sprintf('The requested id "%s" was not found on aggregate "%s".', $aggregateId, $aggregateName));
+        parent::__construct($exception->getMessage(), previous: $exception);
     }
 
-    public static function fromNameAndId(string $aggregateName, string $aggregateId): self
+    public static function fromAggregateNotFound(DomainAggregateNotFound $exception): self
     {
-        return new self($aggregateName, $aggregateId);
+        return new self($exception);
     }
 }

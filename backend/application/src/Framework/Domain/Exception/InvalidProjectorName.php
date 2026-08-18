@@ -8,7 +8,7 @@ use RuntimeException;
 
 use function sprintf;
 
-final class InvalidProjectorName extends RuntimeException
+final class InvalidProjectorName extends RuntimeException implements DomainException
 {
     public static function fromEmptyName(string $className): self
     {
