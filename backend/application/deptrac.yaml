@@ -19,6 +19,10 @@ deptrac:
             collectors:
                 -   type: directory
                     value: src/Framework/Domain/
+        -   name: FrameworkInfrastructure
+            collectors:
+                -   type: directory
+                    value: src/Framework/Infrastructure/
         -   name: FrameworkUserInterface
             collectors:
                 -   type: directory
@@ -30,6 +34,7 @@ deptrac:
                     composerLockPath: composer.lock
                     packages:
                         - bref/symfony-bridge
+                        - doctrine/dbal
                         - symfony/uid
     ruleset:
         Foundation:
@@ -42,6 +47,10 @@ deptrac:
             - FrameworkDomain
         FrameworkDomain:
             - Foundation
+        FrameworkInfrastructure:
+            - Foundation
+            - FrameworkDomain
+            - Vendor
         FrameworkUserInterface:
             - Foundation
             - FrameworkApplicationCommand
