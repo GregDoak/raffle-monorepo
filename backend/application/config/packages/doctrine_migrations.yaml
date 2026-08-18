@@ -1,0 +1,7 @@
+doctrine_migrations:
+    migrations_paths:
+        'App\Framework\Infrastructure\Postgres\Migration': '%kernel.project_dir%/src/Framework/Infrastructure/Postgres/Migration'
+        'App\RaffleDemo\Account\Infrastructure\Postgres\Migration': '%kernel.project_dir%/src/RaffleDemo/Account/Infrastructure/Postgres/Migration'
+        'App\RaffleDemo\Raffle\Infrastructure\Postgres\Migration': '%kernel.project_dir%/src/RaffleDemo/Raffle/Infrastructure/Postgres/Migration'
+        'App\RaffleDemo\Notification\Infrastructure\Postgres\Migration': '%kernel.project_dir%/src/RaffleDemo/Notification/Infrastructure/Postgres/Migration'
+    enable_profiler: false

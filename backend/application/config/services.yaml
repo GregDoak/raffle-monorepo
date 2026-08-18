@@ -3,6 +3,12 @@ services:
         autowire: true
         autoconfigure: true
 
+    ### Framework ###
+
+    App\Framework\Domain\Repository\TransactionBoundary: '@App\Framework\Infrastructure\Doctrine\DbalTransactionBoundary'
+
+    App\Framework\Infrastructure\Doctrine\DbalTransactionBoundary: ~
+
     _instanceof:
         App\Framework\Domain\Projection\Projector:
             tags:

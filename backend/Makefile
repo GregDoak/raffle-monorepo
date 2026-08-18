@@ -25,6 +25,8 @@ build: ## Build the local environment
 	@mkdir -p application/var/cache application/var/log
 	@chmod -R u+rwX application/var/cache application/var/log
 	@${DOCKER_COMPOSE} run -T --rm php composer install --no-interaction
+	@${DOCKER_COMPOSE} run -T --rm php bin/console doctrine:database:create --if-not-exists
+	@${DOCKER_COMPOSE} run -T --rm php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --all-or-nothing
 
 .PHONY: start
 start: build ## Starts the local environment
