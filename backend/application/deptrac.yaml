@@ -19,6 +19,10 @@ deptrac:
             collectors:
                 -   type: directory
                     value: src/Framework/Domain/
+        -   name: FrameworkUserInterface
+            collectors:
+                -   type: directory
+                    value: src/Framework/UserInterface/
         -   name: Vendor
             collectors:
                 -   type: composer
@@ -38,3 +42,7 @@ deptrac:
             - FrameworkDomain
         FrameworkDomain:
             - Foundation
+        FrameworkUserInterface:
+            - Foundation
+            - FrameworkApplicationCommand
+            - FrameworkApplicationQuery
