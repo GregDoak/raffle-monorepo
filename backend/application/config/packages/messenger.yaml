@@ -1,0 +1,17 @@
+framework:
+    messenger:
+        default_bus: command.bus
+        buses:
+            command.bus: ~
+            query.bus: ~
+            aggregate_event.bus:
+                default_middleware: allow_no_handlers
+            domain_event.bus:
+                default_middleware: allow_no_handlers
+
+        transports:
+            sync: 'sync://'
+            domain_event_outbox: 'doctrine://default?queue_name=domain_event_outbox&check_delayed_interval=1000&auto_setup=false'
+
+        routing:
+            App\Foundation\DomainEventRegistry\DomainEvent: domain_event_outbox

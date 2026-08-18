@@ -10,6 +10,23 @@ services:
     App\Framework\Infrastructure\Doctrine\DbalTransactionBoundary: ~
 
     _instanceof:
+        App\Framework\Application\Command\CommandHandler:
+            tags:
+                - { name: messenger.message_handler, bus: command.bus }
+
+        App\Framework\Application\Query\QueryHandler:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
+
+        App\Framework\Domain\Model\Event\AggregateEventsSubscriber:
+            tags:
+                - { name: messenger.message_handler, bus: aggregate_event.bus }
+
         App\Framework\Domain\Projection\Projector:
             tags:
                 - app.projector
+
+        App\Framework\UserInterface\Event\DomainEventSubscriber:
+            tags:
+                - { name: messenger.message_handler, bus: domain_event.bus }
+

@@ -35,6 +35,7 @@ deptrac:
                     packages:
                         - bref/symfony-bridge
                         - doctrine/dbal
+                        - doctrine/migrations
                         - symfony/uid
     ruleset:
         Foundation:
