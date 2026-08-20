@@ -27,6 +27,10 @@ deptrac:
             collectors:
                 -   type: directory
                     value: src/Framework/UserInterface/
+        -   name: RaffleDemoAccountUserInterface
+            collectors:
+                -   type: directory
+                    value: src/RaffleDemo/Account/UserInterface/
         -   name: Vendor
             collectors:
                 -   type: composer
@@ -36,7 +40,13 @@ deptrac:
                         - bref/symfony-bridge
                         - doctrine/dbal
                         - doctrine/migrations
+                        - nelmio/api-doc-bundle
+                        - symfony/http-foundation
+                        - symfony/http-kernel
+                        - symfony/routing
+                        - symfony/validator
                         - symfony/uid
+                        - zircote/swagger-php
     ruleset:
         Foundation:
             - Vendor
@@ -51,8 +61,15 @@ deptrac:
         FrameworkInfrastructure:
             - Foundation
             - FrameworkDomain
+            - FrameworkUserInterface
             - Vendor
         FrameworkUserInterface:
             - Foundation
             - FrameworkApplicationCommand
             - FrameworkApplicationQuery
+            - Vendor
+        RaffleDemoAccountUserInterface:
+            - Foundation
+            - FrameworkUserInterface
+            - Vendor
+

@@ -1,0 +1,10 @@
+accounts_api_v1:
+    resource:
+        path: ../../../../src/RaffleDemo/Account/UserInterface/Http/Api/V1/
+        namespace: App\RaffleDemo\Account\UserInterface\Http\Api\V1
+    type: attribute
+    condition: "request.headers.get('Content-Type') === 'application/json' and (request.headers.get('API-Version') ?? '1') === '1'"
+    prefix: "/api/account"
+    stateless: true
+    defaults:
+        _format: json

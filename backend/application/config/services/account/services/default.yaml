@@ -1,0 +1,9 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+      ### RaffleDemo - Account ###
+
+  App\RaffleDemo\Account\UserInterface\Http\Api\V1\:
+      resource: '../../../../src/RaffleDemo/Account/UserInterface/Http/Api/V1'

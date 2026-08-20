@@ -9,6 +9,10 @@ services:
 
     App\Framework\Infrastructure\Doctrine\DbalTransactionBoundary: ~
 
+    App\Framework\Infrastructure\Symfony\Validation\SymfonyValidator: ~
+
+    App\Framework\UserInterface\Validation\Validator: '@App\Framework\Infrastructure\Symfony\Validation\SymfonyValidator'
+
     _instanceof:
         App\Framework\Application\Command\CommandHandler:
             tags:
@@ -30,3 +34,5 @@ services:
             tags:
                 - { name: messenger.message_handler, bus: domain_event.bus }
 
+imports:
+    - { resource: services/**/services/*.yaml }
