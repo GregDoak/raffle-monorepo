@@ -9,9 +9,23 @@ services:
 
     App\Framework\Infrastructure\Doctrine\DbalTransactionBoundary: ~
 
+    App\Framework\Infrastructure\Symfony\Router\SymfonyInstanceProvider:
+        arguments:
+            $baseBackendUrl: '%env(BASE_BACKEND_URL)%'
+
     App\Framework\Infrastructure\Symfony\Validation\SymfonyValidator: ~
 
+    App\Framework\UserInterface\ApiProblem\ApiProblemExceptionListener: ~
+
+    App\Framework\UserInterface\ApiProblem\DevExceptionTransformer: ~
+
+    App\Framework\UserInterface\ApiProblem\ExceptionTransformer: '@App\Framework\UserInterface\ApiProblem\DevExceptionTransformer'
+
+    App\Framework\UserInterface\ApiProblem\ProblemDetail\InstanceProvider: '@App\Framework\Infrastructure\Symfony\Router\SymfonyInstanceProvider'
+
     App\Framework\UserInterface\Validation\Validator: '@App\Framework\Infrastructure\Symfony\Validation\SymfonyValidator'
+
+    Symfony\Component\Serializer\NameConverter\NameConverterInterface: '@serializer.name_converter.metadata_aware'
 
     _instanceof:
         App\Framework\Application\Command\CommandHandler:
@@ -36,3 +50,9 @@ services:
 
 imports:
     - { resource: services/**/services/*.yaml }
+
+when@prod:
+    services:
+        App\Framework\UserInterface\ApiProblem\ExceptionTransformer: '@App\Framework\UserInterface\ApiProblem\ProdExceptionTransformer'
+
+        App\Framework\UserInterface\ApiProblem\ProdExceptionTransformer: ~

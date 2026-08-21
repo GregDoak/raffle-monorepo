@@ -41,9 +41,13 @@ deptrac:
                         - doctrine/dbal
                         - doctrine/migrations
                         - nelmio/api-doc-bundle
+                        - psr/log
+                        - symfony/event-dispatcher
                         - symfony/http-foundation
                         - symfony/http-kernel
                         - symfony/routing
+                        - symfony/security-core
+                        - symfony/serializer
                         - symfony/validator
                         - symfony/uid
                         - zircote/swagger-php
