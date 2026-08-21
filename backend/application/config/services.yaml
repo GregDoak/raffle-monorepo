@@ -23,6 +23,10 @@ services:
 
     App\Framework\UserInterface\ApiProblem\ProblemDetail\InstanceProvider: '@App\Framework\Infrastructure\Symfony\Router\SymfonyInstanceProvider'
 
+    App\Framework\UserInterface\Hal\HalSerializer:
+        arguments:
+            $baseUrl: '%env(BASE_BACKEND_URL)%'
+
     App\Framework\UserInterface\Validation\Validator: '@App\Framework\Infrastructure\Symfony\Validation\SymfonyValidator'
 
     Symfony\Component\Serializer\NameConverter\NameConverterInterface: '@serializer.name_converter.metadata_aware'

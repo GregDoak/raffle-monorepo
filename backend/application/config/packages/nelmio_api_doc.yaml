@@ -4,6 +4,8 @@ nelmio_api_doc:
             title: RaffleDemo
             description: This is the public documentation for the RaffleDemo application
             version: 1.0.0
+        servers:
+            - url: '%env(BASE_BACKEND_URL)%'
     areas: # to filter documented areas
         path_patterns:
             - ^/api(?!/openapi$) # Accepts routes under /api except /api/openapi$

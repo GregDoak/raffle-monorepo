@@ -33,6 +33,7 @@ return new PhpCsFixer\Config()
         ],
         'line_ending' => true,
         'global_namespace_import' => ['import_classes' => true, 'import_constants' => true, 'import_functions' => true],
+        'phpdoc_align' => ['align' => 'left'],
         'phpdoc_separation' => ['skip_unlisted_annotations' => true],
         'phpdoc_line_span' => ['method' => 'single', 'property' => 'single'],
         'php_unit_method_casing' => ['case' => 'snake_case'],
