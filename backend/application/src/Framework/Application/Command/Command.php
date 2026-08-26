@@ -8,6 +8,8 @@ use App\Foundation\Clock\Timestamp;
 
 interface Command
 {
+    public function getCommandId(): string;
+
     public function getOccurredAt(): Timestamp;
 
     public function getCorrelationId(): string;

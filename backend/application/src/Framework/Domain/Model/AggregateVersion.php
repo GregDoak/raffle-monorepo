@@ -35,4 +35,9 @@ abstract readonly class AggregateVersion
     {
         return $this->version;
     }
+
+    public function equals(self $that): bool
+    {
+        return $this->version === $that->toInt();
+    }
 }

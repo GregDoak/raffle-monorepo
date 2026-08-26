@@ -23,4 +23,9 @@ abstract readonly class AbstractInt
     {
         return $this->value;
     }
+
+    public function equals(self $that): bool
+    {
+        return $this->value === $that->toInt();
+    }
 }

@@ -11,6 +11,8 @@ use App\Framework\Domain\Model\AggregateVersion;
 
 interface AggregateEvent
 {
+    public function getEventId(): string;
+
     public function getEventName(): string;
 
     public function getAggregateName(): AggregateName;

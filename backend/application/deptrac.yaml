@@ -27,6 +27,18 @@ deptrac:
             collectors:
                 -   type: directory
                     value: src/Framework/UserInterface/
+        -   name: RaffleDemoAccountApplication
+            collectors:
+                -   type: directory
+                    value: src/RaffleDemo/Account/Application/
+        -   name: RaffleDemoAccountDomain
+            collectors:
+                -   type: directory
+                    value: src/RaffleDemo/Account/Domain/
+        -   name: RaffleDemoAccountInfrastructure
+            collectors:
+                -   type: directory
+                    value: src/RaffleDemo/Account/Infrastructure/
         -   name: RaffleDemoAccountUserInterface
             collectors:
                 -   type: directory
@@ -72,6 +84,17 @@ deptrac:
             - FrameworkApplicationCommand
             - FrameworkApplicationQuery
             - Vendor
+        RaffleDemoAccountApplication:
+            - Foundation
+            - FrameworkApplicationCommand
+            - FrameworkDomain
+            - RaffleDemoAccountDomain
+        RaffleDemoAccountDomain:
+            - Foundation
+            - FrameworkDomain
+        RaffleDemoAccountInfrastructure:
+            - Foundation
+            - FrameworkDomain
         RaffleDemoAccountUserInterface:
             - Foundation
             - FrameworkUserInterface
