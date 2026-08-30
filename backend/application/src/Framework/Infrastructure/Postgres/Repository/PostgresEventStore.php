@@ -28,13 +28,11 @@ abstract readonly class PostgresEventStore implements EventStore
 
     public function store(AggregateEvents $events): void
     {
-        $this->connection->beginTransaction();
-
         $sql = <<<SQL
             INSERT INTO {$this->domain}.event_store
-                (transaction_id, aggregate_name, aggregate_id, aggregate_version, event_name, event_data)
+                (aggregate_name, aggregate_id, aggregate_version, event_name, event_data)
             VALUES
-                (pg_current_xact_id(), :aggregate_name, :aggregate_id, :aggregate_version, :event_name, :event_data);
+                (:aggregate_name, :aggregate_id, :aggregate_version, :event_name, :event_data);
         SQL;
 
         $statement = $this->connection->prepare($sql);
@@ -49,8 +47,6 @@ abstract readonly class PostgresEventStore implements EventStore
 
             $statement->executeStatement();
         }
-
-        $this->connection->commit();
     }
 
     public function get(AggregateName $name, AggregateId $id): AggregateEvents
@@ -89,32 +85,41 @@ abstract readonly class PostgresEventStore implements EventStore
 
     public function stream(EventStreamPointer $start, int $limit): AggregateEventsStream
     {
+        $end = $this->findEndPointer($start, $limit);
+
+        if ($end === null) {
+            return new AggregateEventsStream(next: $start, events: AggregateEvents::fromNew());
+        }
+
         $sql = <<<SQL
             SELECT
                 event_store.id,
+                event_store.transaction_id,
                 event_store.event_name,
                 event_store.event_data
             FROM
                 {$this->domain}.event_store
             WHERE
-                event_store.id >= :start
-                AND event_store.transaction_id < pg_snapshot_xmin(pg_current_snapshot())
+                event_store.transaction_id >= :start
+                AND event_store.transaction_id <= :end
             ORDER BY
-                event_store.id ASC
-            LIMIT :limit;
+                event_store.transaction_id ASC,
+                event_store.id ASC;
         SQL;
 
         $statement = $this->connection->prepare($sql);
-        $statement->bindValue('start', $start->position);
-        $statement->bindValue('limit', $limit);
 
-        /** @var array<int, array{id: int, event_name: string, event_data: string}> $results */
+        // start and end are XID8, not an INTEGER.
+        $statement->bindValue('start', (string) $start->position);
+        $statement->bindValue('end', (string) $end->position);
+
+        /** @var array<int, array{id: int, transaction_id: string, event_name: string, event_data: string}> $results */
         $results = $statement->executeQuery()->fetchAllAssociative();
 
-        $lastId = count($results) === 0 ? null : $results[array_key_last($results)]['id'];
+        $lastTransactionId = count($results) === 0 ? null : $results[array_key_last($results)]['transaction_id'];
 
         return new AggregateEventsStream(
-            next: $lastId === null ? $start : EventStreamPointer::fromInt($lastId + 1),
+            next: $lastTransactionId === null ? $start : EventStreamPointer::fromInt((int) $lastTransactionId + 1),
             events: array_reduce(
                 $results,
                 fn (AggregateEvents $events, array $event) => $events->add(
@@ -126,5 +131,40 @@ abstract readonly class PostgresEventStore implements EventStore
                 AggregateEvents::fromNew(),
             ),
         );
+    }
+
+    private function findEndPointer(EventStreamPointer $start, int $limit): ?EventStreamPointer
+    {
+        $sql = <<<SQL
+            SELECT
+                MAX(bounded.transaction_id)
+            FROM (
+                SELECT DISTINCT
+                    event_store.transaction_id
+                FROM
+                    {$this->domain}.event_store
+                WHERE
+                    event_store.transaction_id >= :start
+                    AND event_store.transaction_id < pg_snapshot_xmin(pg_current_snapshot())
+                ORDER BY
+                    event_store.transaction_id ASC
+                LIMIT :limit
+            ) bounded;
+        SQL;
+
+        $statement = $this->connection->prepare($sql);
+
+        // start is a XID8, not an INTEGER.
+        $statement->bindValue('start', (string) $start->position);
+        $statement->bindValue('limit', $limit, ParameterType::INTEGER);
+
+        /** @var string|int|false|null $end */
+        $end = $statement->executeQuery()->fetchOne();
+
+        if ($end === false || $end === null) {
+            return null;
+        }
+
+        return EventStreamPointer::fromInt((int) $end);
     }
 }

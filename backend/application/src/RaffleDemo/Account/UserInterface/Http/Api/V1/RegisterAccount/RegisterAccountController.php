@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\RaffleDemo\Account\UserInterface\Http\Api\V1\RegisterAccount;
 
 use App\Foundation\Uuid\Uuid;
+use App\Framework\Application\Command\CommandBus;
 use App\Framework\UserInterface\Hal\HalJsonResponse;
 use App\Framework\UserInterface\Hal\HalSerializer;
 use App\Framework\UserInterface\OpenApi\ApiProblem\ProblemDetail\ValidationErrorResponse;
 use App\Framework\UserInterface\OpenApi\Hal\HalResponse;
+use App\RaffleDemo\Account\Application\Command\CreateUsernamePasswordAccount\CreateUsernamePasswordAccountCommand;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,12 +45,22 @@ final readonly class RegisterAccountController
     private const string NEXT_HREF = '/api/accounts/login';
 
     public function __construct(
+        private CommandBus $commandBus,
         private HalSerializer $halSerializer,
     ) {
     }
 
     public function __invoke(RegisterAccountRequest $request): HalJsonResponse
     {
+        $this->commandBus->dispatchSync(
+            CreateUsernamePasswordAccountCommand::create(
+                firstName: $request->firstName,
+                lastName: $request->lastName,
+                emailAddress: $request->email,
+                correlationId: Uuid::v7(), // todo get from request
+            ),
+        );
+
         $response = new RegisterAccountResponse(
             id: Uuid::v7(),
             firstName: $request->firstName,

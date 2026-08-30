@@ -55,4 +55,28 @@ final readonly class PersonalData
             createdAt: CreatedAt::fromNew(),
         );
     }
+
+    /**
+     * @param array{
+     *     id: string,
+     *     version: int,
+     *     account_id: string,
+     *     first_name: string,
+     *     last_name: string,
+     *     email_address: string,
+     *     created_at: string,
+     * } $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            id: PersonalDataAggregateId::fromString($data['id']),
+            version: PersonalDataAggregateVersion::fromInt($data['version']),
+            accountId: AccountAggregateId::fromString($data['account_id']),
+            firstName: FirstName::fromString($data['first_name']),
+            lastName: LastName::fromString($data['last_name']),
+            emailAddress: EmailAddress::fromString($data['email_address']),
+            createdAt: CreatedAt::fromString($data['created_at']),
+        );
+    }
 }

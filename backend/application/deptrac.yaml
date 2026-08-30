@@ -57,6 +57,7 @@ deptrac:
                         - symfony/event-dispatcher
                         - symfony/http-foundation
                         - symfony/http-kernel
+                        - symfony/messenger
                         - symfony/routing
                         - symfony/security-core
                         - symfony/serializer
@@ -76,6 +77,8 @@ deptrac:
             - Foundation
         FrameworkInfrastructure:
             - Foundation
+            - FrameworkApplicationCommand
+            - FrameworkApplicationQuery
             - FrameworkDomain
             - FrameworkUserInterface
             - Vendor
@@ -95,8 +98,14 @@ deptrac:
         RaffleDemoAccountInfrastructure:
             - Foundation
             - FrameworkDomain
+            - FrameworkInfrastructure
+            - RaffleDemoAccountDomain
+            - Vendor
         RaffleDemoAccountUserInterface:
             - Foundation
+            - FrameworkApplicationCommand
+            - FrameworkApplicationQuery
             - FrameworkUserInterface
+            - RaffleDemoAccountApplication
             - Vendor
 

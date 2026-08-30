@@ -1,9 +1,48 @@
 services:
-  _defaults:
-    autowire: true
-    autoconfigure: true
+    _defaults:
+        autowire: true
+        autoconfigure: true
 
-      ### RaffleDemo - Account ###
+    ### RaffleDemo - Account ###
 
-  App\RaffleDemo\Account\UserInterface\Http\Api\V1\:
-      resource: '../../../../src/RaffleDemo/Account/UserInterface/Http/Api/V1'
+    App\RaffleDemo\Account\Application\:
+        resource: '../../../../src/RaffleDemo/Account/Application'
+
+    App\RaffleDemo\Account\Domain\Account\Model\Event\AccountEventFactory: ~
+
+    App\RaffleDemo\Account\Domain\Account\Repository\AccountEventStoreRepository:
+        arguments:
+            $eventStore: '@App\RaffleDemo\Account\Infrastructure\Postgres\Repository\PostgresAccountEventStore'
+
+    App\RaffleDemo\Account\Infrastructure\Postgres\Repository\PostgresAccountEventStore:
+        arguments:
+            $aggregateEventFactory: '@App\RaffleDemo\Account\Domain\Account\Model\Event\AccountEventFactory'
+            $domain: 'account'
+
+    App\RaffleDemo\Account\Domain\PersonalData\Repository\PersonalDataRepository: '@App\RaffleDemo\Account\Infrastructure\Postgres\Repository\PostgresPersonalDataRepository'
+
+    App\RaffleDemo\Account\Infrastructure\Postgres\Repository\PostgresPersonalDataRepository: ~
+
+    App\RaffleDemo\Account\UserInterface\Http\Api\V1\:
+        resource: '../../../../src/RaffleDemo/Account/UserInterface/Http/Api/V1'
+
+    _instanceof:
+        App\Framework\Application\Command\CommandHandler:
+            tags:
+                - { name: messenger.message_handler, bus: command.bus }
+
+        App\Framework\Application\Query\QueryHandler:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
+
+        App\Framework\Domain\Model\Event\AggregateEventsSubscriber:
+            tags:
+                - { name: messenger.message_handler, bus: aggregate_event.bus }
+
+        App\Framework\Domain\Projection\Projector:
+            tags:
+                - app.projector
+
+        App\Framework\UserInterface\Event\DomainEventSubscriber:
+            tags:
+                - { name: messenger.message_handler, bus: domain_event.bus }

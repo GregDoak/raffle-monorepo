@@ -5,9 +5,37 @@ services:
 
     ### Framework ###
 
+    App\Framework\Application\Command\CommandBus: '@App\Framework\Infrastructure\Symfony\Messenger\SymfonyCommandBus'
+
+    App\Framework\Application\Command\Exception\ExceptionTransformer: ~
+
+    App\Framework\Application\Query\QueryBus: '@App\Framework\Infrastructure\Symfony\Messenger\SymfonyQueryBus'
+
+    App\Framework\Application\Query\Exception\ExceptionTransformer: ~
+
+    App\Framework\Domain\Event\DomainEventBus: '@App\Framework\Infrastructure\Symfony\Messenger\SymfonyDomainEventBus'
+
+    App\Framework\Domain\Model\Event\AggregateEventsBus: '@App\Framework\Infrastructure\Symfony\Messenger\SymfonyAggregateEventBus'
+
     App\Framework\Domain\Repository\TransactionBoundary: '@App\Framework\Infrastructure\Doctrine\DbalTransactionBoundary'
 
     App\Framework\Infrastructure\Doctrine\DbalTransactionBoundary: ~
+
+    App\Framework\Infrastructure\Symfony\Messenger\SymfonyAggregateEventBus:
+        arguments:
+            $aggregateEventBus: '@aggregate_event.bus'
+
+    App\Framework\Infrastructure\Symfony\Messenger\SymfonyCommandBus:
+        arguments:
+            $commandBus: '@command.bus'
+
+    App\Framework\Infrastructure\Symfony\Messenger\SymfonyDomainEventBus:
+        arguments:
+            $domainEventBus: '@domain_event.bus'
+
+    App\Framework\Infrastructure\Symfony\Messenger\SymfonyQueryBus:
+        arguments:
+            $queryBus: '@query.bus'
 
     App\Framework\Infrastructure\Symfony\Router\SymfonyInstanceProvider:
         arguments:
@@ -30,27 +58,6 @@ services:
     App\Framework\UserInterface\Validation\Validator: '@App\Framework\Infrastructure\Symfony\Validation\SymfonyValidator'
 
     Symfony\Component\Serializer\NameConverter\NameConverterInterface: '@serializer.name_converter.metadata_aware'
-
-    _instanceof:
-        App\Framework\Application\Command\CommandHandler:
-            tags:
-                - { name: messenger.message_handler, bus: command.bus }
-
-        App\Framework\Application\Query\QueryHandler:
-            tags:
-                - { name: messenger.message_handler, bus: query.bus }
-
-        App\Framework\Domain\Model\Event\AggregateEventsSubscriber:
-            tags:
-                - { name: messenger.message_handler, bus: aggregate_event.bus }
-
-        App\Framework\Domain\Projection\Projector:
-            tags:
-                - app.projector
-
-        App\Framework\UserInterface\Event\DomainEventSubscriber:
-            tags:
-                - { name: messenger.message_handler, bus: domain_event.bus }
 
 imports:
     - { resource: services/**/services/*.yaml }
