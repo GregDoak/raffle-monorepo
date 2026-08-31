@@ -13,6 +13,8 @@ use App\RaffleDemo\Account\Domain\Account\ValueObject\AccountRoleCollection;
 use App\RaffleDemo\Account\Domain\Account\ValueObject\PersonalDataPointer;
 use App\RaffleDemo\Account\Domain\PersonalData\Model\PersonalData;
 use App\RaffleDemo\Account\Domain\PersonalData\Repository\PersonalDataRepository;
+use App\RaffleDemo\Account\Domain\Token\Model\Token;
+use App\RaffleDemo\Account\Domain\Token\Repository\TokenRepository;
 use Throwable;
 
 final readonly class CreateUsernamePasswordAccountCommandHandler implements CommandHandler
@@ -21,11 +23,18 @@ final readonly class CreateUsernamePasswordAccountCommandHandler implements Comm
         private TransactionBoundary $transactionBoundary,
         private AccountEventStoreRepository $eventStore,
         private PersonalDataRepository $personalDataRepository,
+        private TokenRepository $tokenRepository,
     ) {
     }
 
     public function __invoke(CreateUsernamePasswordAccountCommand $command): void
     {
+        $usernamePassword = Token::fromNewUsernamePassword(
+            accountId: $command->id,
+            username: $command->emailAddress->toString(),
+            hashedPassword: 'hashedPassword',
+        );
+
         $personalData = PersonalData::fromNew(
             accountId: $command->id,
             firstName: $command->firstName,
@@ -50,6 +59,7 @@ final readonly class CreateUsernamePasswordAccountCommandHandler implements Comm
         $this->transactionBoundary->begin();
 
         try {
+            $this->tokenRepository->store($usernamePassword);
             $this->personalDataRepository->store($personalData);
             $this->eventStore->store($account);
         } catch (Throwable $throwable) {

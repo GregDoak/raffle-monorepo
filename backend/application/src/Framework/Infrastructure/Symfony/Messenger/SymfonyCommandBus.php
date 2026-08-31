@@ -6,7 +6,10 @@ namespace App\Framework\Infrastructure\Symfony\Messenger;
 
 use App\Framework\Application\Command\Command;
 use App\Framework\Application\Command\CommandBus;
+use App\Framework\Application\Command\Exception\CommandNotRegistered;
 use App\Framework\Application\Command\Exception\ExceptionTransformer;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Messenger\Exception\NoHandlerForMessageException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\StampInterface;
 use Symfony\Component\Messenger\Stamp\TransportNamesStamp;
@@ -29,6 +32,16 @@ final readonly class SymfonyCommandBus implements CommandBus
     {
         try {
             $this->commandBus->dispatch($command, [$stamp]);
+        } catch (NoHandlerForMessageException) {
+            throw new CommandNotRegistered($command);
+        } catch (HandlerFailedException $exception) {
+            $previous = $exception;
+
+            while ($previous instanceof HandlerFailedException) {
+                $previous = $previous->getPrevious();
+            }
+
+            throw $previous !== null ? $this->exceptionTransformer->transform($previous) : $exception;
         } catch (Throwable $exception) {
             throw $this->exceptionTransformer->transform($exception);
         }

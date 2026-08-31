@@ -14,14 +14,18 @@ services:
         arguments:
             $eventStore: '@App\RaffleDemo\Account\Infrastructure\Postgres\Repository\PostgresAccountEventStore'
 
+    App\RaffleDemo\Account\Domain\PersonalData\Repository\PersonalDataRepository: '@App\RaffleDemo\Account\Infrastructure\Postgres\Repository\PostgresPersonalDataRepository'
+
+    App\RaffleDemo\Account\Domain\Token\Repository\TokenRepository: '@App\RaffleDemo\Account\Infrastructure\Postgres\Repository\PostgresTokenRepository'
+
     App\RaffleDemo\Account\Infrastructure\Postgres\Repository\PostgresAccountEventStore:
         arguments:
             $aggregateEventFactory: '@App\RaffleDemo\Account\Domain\Account\Model\Event\AccountEventFactory'
             $domain: 'account'
 
-    App\RaffleDemo\Account\Domain\PersonalData\Repository\PersonalDataRepository: '@App\RaffleDemo\Account\Infrastructure\Postgres\Repository\PostgresPersonalDataRepository'
-
     App\RaffleDemo\Account\Infrastructure\Postgres\Repository\PostgresPersonalDataRepository: ~
+
+    App\RaffleDemo\Account\Infrastructure\Postgres\Repository\PostgresTokenRepository: ~
 
     App\RaffleDemo\Account\UserInterface\Http\Api\V1\:
         resource: '../../../../src/RaffleDemo/Account/UserInterface/Http/Api/V1'
