@@ -9,6 +9,8 @@ use App\RaffleDemo\Account\Domain\Account\Model\AccountAggregateId;
 use App\RaffleDemo\Account\Domain\PersonalData\ValueObject\EmailAddress;
 use App\RaffleDemo\Account\Domain\PersonalData\ValueObject\FirstName;
 use App\RaffleDemo\Account\Domain\PersonalData\ValueObject\LastName;
+use App\RaffleDemo\Account\Domain\Token\ValueObject\UsernamePassword\HashedPassword;
+use App\RaffleDemo\Account\Domain\Token\ValueObject\UsernamePassword\Username;
 
 final readonly class CreateUsernamePasswordAccountCommand extends AbstractCommand
 {
@@ -17,6 +19,8 @@ final readonly class CreateUsernamePasswordAccountCommand extends AbstractComman
         public FirstName $firstName,
         public LastName $lastName,
         public EmailAddress $emailAddress,
+        public Username $username,
+        public HashedPassword $hashedPassword,
         private string $correlationId,
         private string $causationId,
     ) {
@@ -30,6 +34,7 @@ final readonly class CreateUsernamePasswordAccountCommand extends AbstractComman
         string $firstName,
         string $lastName,
         string $emailAddress,
+        string $hashedPassword,
         string $correlationId,
     ): self {
         return new self(
@@ -37,6 +42,8 @@ final readonly class CreateUsernamePasswordAccountCommand extends AbstractComman
             FirstName::fromString($firstName),
             LastName::fromString($lastName),
             EmailAddress::fromString($emailAddress),
+            Username::fromString($emailAddress),
+            HashedPassword::fromString($hashedPassword),
             correlationId: $correlationId,
             causationId: $correlationId,
         );
@@ -49,6 +56,8 @@ final readonly class CreateUsernamePasswordAccountCommand extends AbstractComman
             'firstName' => $this->firstName->toString(),
             'lastName' => $this->lastName->toString(),
             'emailAddress' => $this->emailAddress->toString(),
+            'username' => $this->username->toString(),
+            'hashedPassword' => $this->hashedPassword->toString(),
         ];
     }
 }

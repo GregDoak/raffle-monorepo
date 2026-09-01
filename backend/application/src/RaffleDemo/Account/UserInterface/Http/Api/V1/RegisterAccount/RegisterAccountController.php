@@ -56,7 +56,8 @@ final readonly class RegisterAccountController
             CreateUsernamePasswordAccountCommand::create(
                 firstName: $request->firstName,
                 lastName: $request->lastName,
-                emailAddress: $request->email,
+                emailAddress: $request->emailAddress,
+                hashedPassword: $request->hashedPassword,
                 correlationId: Uuid::v7(), // todo get from request
             ),
         );
@@ -65,7 +66,7 @@ final readonly class RegisterAccountController
             id: Uuid::v7(),
             firstName: $request->firstName,
             lastName: $request->lastName,
-            email: $request->email,
+            emailAddress: $request->emailAddress,
         );
 
         return new HalJsonResponse(

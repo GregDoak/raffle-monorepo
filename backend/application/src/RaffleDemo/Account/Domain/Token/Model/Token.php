@@ -11,6 +11,8 @@ use App\RaffleDemo\Account\Domain\Token\ValueObject\CreatedAt;
 use App\RaffleDemo\Account\Domain\Token\ValueObject\ExpiresAt;
 use App\RaffleDemo\Account\Domain\Token\ValueObject\Selector;
 use App\RaffleDemo\Account\Domain\Token\ValueObject\UpdatedAt;
+use App\RaffleDemo\Account\Domain\Token\ValueObject\UsernamePassword\HashedPassword;
+use App\RaffleDemo\Account\Domain\Token\ValueObject\UsernamePassword\Username;
 use App\RaffleDemo\Account\Domain\Token\ValueObject\Verifier;
 
 final readonly class Token
@@ -29,15 +31,15 @@ final readonly class Token
 
     public static function fromNewUsernamePassword(
         AccountAggregateId $accountId,
-        string $username,
-        string $hashedPassword,
+        Username $username,
+        HashedPassword $hashedPassword,
     ): self {
         return new self(
             id: TokenAggregateId::fromNew(),
             accountId: $accountId,
             context: Context::UsernamePassword,
-            selector: Selector::fromString($username),
-            verifier: Verifier::fromString($hashedPassword),
+            selector: Selector::fromString($username->toString()),
+            verifier: Verifier::fromString($hashedPassword->toString()),
             createdAt: CreatedAt::fromNew(),
             updatedAt: UpdatedAt::fromNull(),
             expiresAt: ExpiresAt::fromNull(),

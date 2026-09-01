@@ -58,6 +58,7 @@ deptrac:
                         - symfony/http-foundation
                         - symfony/http-kernel
                         - symfony/messenger
+                        - symfony/password-hasher
                         - symfony/routing
                         - symfony/security-core
                         - symfony/serializer

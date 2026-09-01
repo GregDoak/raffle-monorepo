@@ -40,7 +40,7 @@ final readonly class RegisterAccountRequest
             description: 'The account email address.',
             example: 'john.smith@example.com',
         )]
-        public string $email,
+        public string $emailAddress,
         #[SensitiveParameter]
         #[Assert\NotBlank]
         #[Assert\Length(min: 8)]
@@ -49,7 +49,7 @@ final readonly class RegisterAccountRequest
             example: 'correct-horse-battery-staple',
             minLength: 8,
         )]
-        public string $password,
+        public string $hashedPassword,
     ) {
     }
 }

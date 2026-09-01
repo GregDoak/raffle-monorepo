@@ -31,8 +31,8 @@ final readonly class CreateUsernamePasswordAccountCommandHandler implements Comm
     {
         $usernamePassword = Token::fromNewUsernamePassword(
             accountId: $command->id,
-            username: $command->emailAddress->toString(),
-            hashedPassword: 'hashedPassword',
+            username: $command->username,
+            hashedPassword: $command->hashedPassword,
         );
 
         $personalData = PersonalData::fromNew(

@@ -32,18 +32,18 @@ final readonly class RegisterAccountResponse
             description: 'The account email address.',
             example: 'john.smith@example.com',
         )]
-        public string $email,
+        public string $emailAddress,
     ) {
     }
 
-    /** @return array{id: string, first_name: string, last_name: string, email: string} */
+    /** @return array{id: string, first_name: string, last_name: string, email_address: string} */
     public function toArray(): array
     {
         return [
             'id' => $this->id,
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
-            'email' => $this->email,
+            'email_address' => $this->emailAddress,
         ];
     }
 }
