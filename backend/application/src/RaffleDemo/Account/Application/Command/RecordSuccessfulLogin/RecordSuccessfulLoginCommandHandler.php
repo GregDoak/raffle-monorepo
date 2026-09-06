@@ -29,6 +29,7 @@ final readonly class RecordSuccessfulLoginCommandHandler implements CommandHandl
             ),
             correlationId: $command->getCorrelationId(),
             causationId: $command->getCommandId(),
+            dispatchedBy: $command->getDispatchedBy(),
         );
 
         $this->transactionBoundary->begin();

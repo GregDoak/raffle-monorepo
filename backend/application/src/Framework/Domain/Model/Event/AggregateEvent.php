@@ -27,6 +27,8 @@ interface AggregateEvent
 
     public function getCausationId(): string;
 
+    public function getDispatchedBy(): string;
+
     public function serialize(): string;
 
     public static function deserialize(string $serialized): self;

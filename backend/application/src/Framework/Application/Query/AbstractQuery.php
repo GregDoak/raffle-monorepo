@@ -13,6 +13,7 @@ abstract readonly class AbstractQuery implements Query
     protected function __construct(
         private string $correlationId,
         private string $causationId,
+        private string $dispatchedBy,
     ) {
         $this->occurredAt = Timestamp::now();
     }
@@ -30,5 +31,10 @@ abstract readonly class AbstractQuery implements Query
     public function getCausationId(): string
     {
         return $this->causationId;
+    }
+
+    public function getDispatchedBy(): string
+    {
+        return $this->dispatchedBy;
     }
 }

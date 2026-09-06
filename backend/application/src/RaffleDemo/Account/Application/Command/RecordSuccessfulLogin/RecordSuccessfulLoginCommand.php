@@ -13,24 +13,25 @@ final readonly class RecordSuccessfulLoginCommand extends AbstractCommand
     private function __construct(
         public AccountAggregateId $accountId,
         public Context $context,
-        private string $correlationId,
-        private string $causationId,
+        string $correlationId,
+        string $causationId,
+        string $dispatchedBy,
     ) {
-        parent::__construct(
-            $this->correlationId,
-            $this->causationId,
-        );
+        parent::__construct($correlationId, $causationId, $dispatchedBy);
     }
 
     public static function fromUsernamePassword(
         string $accountId,
         string $correlationId,
+        string $dispatchedBy,
+        ?string $causationId = null,
     ): self {
         return new self(
             accountId: AccountAggregateId::fromString($accountId),
             context: Context::UsernamePassword,
             correlationId: $correlationId,
-            causationId: $correlationId,
+            causationId: $causationId ?? $correlationId,
+            dispatchedBy: $dispatchedBy,
         );
     }
 

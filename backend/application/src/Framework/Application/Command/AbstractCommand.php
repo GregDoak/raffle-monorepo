@@ -15,6 +15,7 @@ abstract readonly class AbstractCommand implements Command
     protected function __construct(
         private string $correlationId,
         private string $causationId,
+        private string $dispatchedBy,
     ) {
         $this->commandId = Uuid::v7();
         $this->occurredAt = Timestamp::now();
@@ -38,5 +39,10 @@ abstract readonly class AbstractCommand implements Command
     public function getCausationId(): string
     {
         return $this->causationId;
+    }
+
+    public function getDispatchedBy(): string
+    {
+        return $this->dispatchedBy;
     }
 }

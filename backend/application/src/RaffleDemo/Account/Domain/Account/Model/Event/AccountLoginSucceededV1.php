@@ -27,6 +27,7 @@ final readonly class AccountLoginSucceededV1 implements AggregateEvent
         public Timestamp $occurredAt,
         public string $correlationId,
         public string $causationId,
+        public string $dispatchedBy,
     ) {
     }
 
@@ -70,6 +71,11 @@ final readonly class AccountLoginSucceededV1 implements AggregateEvent
         return $this->causationId;
     }
 
+    public function getDispatchedBy(): string
+    {
+        return $this->dispatchedBy;
+    }
+
     public function serialize(): string
     {
         return JsonSerializer::serialize([
@@ -80,6 +86,7 @@ final readonly class AccountLoginSucceededV1 implements AggregateEvent
             'occurred_at' => $this->occurredAt->toString(),
             'correlation_id' => $this->correlationId,
             'causation_id' => $this->causationId,
+            'dispatched_by' => $this->dispatchedBy,
         ]);
     }
 
@@ -94,6 +101,7 @@ final readonly class AccountLoginSucceededV1 implements AggregateEvent
          *     occurred_at: string,
          *     correlation_id: string,
          *     causation_id: string,
+         *     dispatched_by: string,
          * } $data
          */
         $data = JsonSerializer::deserialize($serialized);
@@ -106,6 +114,7 @@ final readonly class AccountLoginSucceededV1 implements AggregateEvent
             occurredAt: Timestamp::fromString($data['occurred_at']),
             correlationId: $data['correlation_id'],
             causationId: $data['causation_id'],
+            dispatchedBy: $data['dispatched_by'],
         );
     }
 }

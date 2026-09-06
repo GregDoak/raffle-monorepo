@@ -68,6 +68,7 @@ final class Account extends Aggregate
         AccountRoleCollection $roles,
         string $correlationId,
         string $causationId,
+        string $dispatchedBy,
         Timestamp $occurredAt,
     ): self {
         $account = new self();
@@ -81,6 +82,7 @@ final class Account extends Aggregate
             occurredAt: $occurredAt,
             correlationId: $correlationId,
             causationId: $causationId,
+            dispatchedBy: $dispatchedBy,
         ));
 
         return $account;
@@ -90,6 +92,7 @@ final class Account extends Aggregate
         LoginResult $loginResult,
         string $correlationId,
         string $causationId,
+        string $dispatchedBy,
     ): void {
         $this->raise(match ($loginResult->type) {
             LoginResultType::Succeeded => new AccountLoginSucceededV1(
@@ -100,6 +103,7 @@ final class Account extends Aggregate
                 occurredAt: $loginResult->occurredAt,
                 correlationId: $correlationId,
                 causationId: $causationId,
+                dispatchedBy: $dispatchedBy,
             ),
         });
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\RaffleDemo\Account\UserInterface\Http\Api\V1\RegisterAccount;
 
 use App\Foundation\Serializer\JsonSerializer;
+use App\Framework\UserInterface\CorrelationId\CorrelationIdProvider;
 use App\Framework\UserInterface\Validation\Validator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
@@ -16,6 +17,7 @@ final readonly class RegisterAccountRequestResolver implements ValueResolverInte
     public function __construct(
         private Validator $validator,
         private PasswordHasherFactoryInterface $passwordHasherFactory,
+        private CorrelationIdProvider $correlationIdProvider,
     ) {
     }
 
@@ -37,6 +39,7 @@ final readonly class RegisterAccountRequestResolver implements ValueResolverInte
             lastName: $data['last_name'] ?? '',
             emailAddress: $data['email_address'] ?? '',
             hashedPassword: $data['password'] ?? '',
+            correlationId: $this->correlationIdProvider->provide(),
         );
 
         $this->validator->validate($registerAccountRequest);
@@ -48,6 +51,7 @@ final readonly class RegisterAccountRequestResolver implements ValueResolverInte
             hashedPassword: $this->passwordHasherFactory
                 ->getPasswordHasher('account')
                 ->hash($registerAccountRequest->hashedPassword),
+            correlationId: $registerAccountRequest->correlationId,
         );
     }
 }

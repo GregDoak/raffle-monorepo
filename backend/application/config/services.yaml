@@ -9,9 +9,9 @@ services:
 
     App\Framework\Application\Command\Exception\ExceptionTransformer: ~
 
-    App\Framework\Application\Query\QueryBus: '@App\Framework\Infrastructure\Symfony\Messenger\SymfonyQueryBus'
-
     App\Framework\Application\Query\Exception\ExceptionTransformer: ~
+
+    App\Framework\Application\Query\QueryBus: '@App\Framework\Infrastructure\Symfony\Messenger\SymfonyQueryBus'
 
     App\Framework\Domain\Event\DomainEventBus: '@App\Framework\Infrastructure\Symfony\Messenger\SymfonyDomainEventBus'
 
@@ -20,6 +20,8 @@ services:
     App\Framework\Domain\Repository\TransactionBoundary: '@App\Framework\Infrastructure\Doctrine\DbalTransactionBoundary'
 
     App\Framework\Infrastructure\Doctrine\DbalTransactionBoundary: ~
+
+    App\Framework\Infrastructure\Symfony\CorrelationId\SymfonyCorrelationIdProvider: ~
 
     App\Framework\Infrastructure\Symfony\Messenger\SymfonyAggregateEventBus:
         arguments:
@@ -50,6 +52,8 @@ services:
     App\Framework\UserInterface\ApiProblem\ExceptionTransformer: '@App\Framework\UserInterface\ApiProblem\DevExceptionTransformer'
 
     App\Framework\UserInterface\ApiProblem\ProblemDetail\InstanceProvider: '@App\Framework\Infrastructure\Symfony\Router\SymfonyInstanceProvider'
+
+    App\Framework\UserInterface\CorrelationId\CorrelationIdProvider: '@App\Framework\Infrastructure\Symfony\CorrelationId\SymfonyCorrelationIdProvider'
 
     App\Framework\UserInterface\Hal\HalSerializer:
         arguments:

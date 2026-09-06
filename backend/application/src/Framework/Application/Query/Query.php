@@ -14,6 +14,8 @@ interface Query
 
     public function getCausationId(): string;
 
+    public function getDispatchedBy(): string;
+
     /** @return mixed[] */
     public function serialize(): array;
 }

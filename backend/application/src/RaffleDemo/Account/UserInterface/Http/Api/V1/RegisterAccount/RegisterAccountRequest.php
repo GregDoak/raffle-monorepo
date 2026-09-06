@@ -6,6 +6,7 @@ namespace App\RaffleDemo\Account\UserInterface\Http\Api\V1\RegisterAccount;
 
 use OpenApi\Attributes as OA;
 use SensitiveParameter;
+use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[OA\Schema(
@@ -50,6 +51,8 @@ final readonly class RegisterAccountRequest
             minLength: 8,
         )]
         public string $hashedPassword,
+        #[Ignore]
+        public string $correlationId,
     ) {
     }
 }

@@ -51,6 +51,7 @@ final readonly class CreateUsernamePasswordAccountCommandHandler implements Comm
             roles: AccountRoleCollection::fromRoles(AccountRole::AccountUser),
             correlationId: $command->getCorrelationId(),
             causationId: $command->getCommandId(),
+            dispatchedBy: $command->getDispatchedBy(),
             occurredAt: $command->getOccurredAt(),
         );
 

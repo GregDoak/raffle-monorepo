@@ -53,12 +53,14 @@ final readonly class RegisterAccountController
 
     public function __invoke(RegisterAccountRequest $request): HalJsonResponse
     {
+        $correlationId = $request->correlationId;
+
         $createUsernamePasswordAccountCommand = CreateUsernamePasswordAccountCommand::create(
             firstName: $request->firstName,
             lastName: $request->lastName,
             emailAddress: $request->emailAddress,
             hashedPassword: $request->hashedPassword,
-            correlationId: Uuid::v7(), // todo get from request
+            correlationId: $correlationId,
         );
 
         $this->commandBus->dispatchSync($createUsernamePasswordAccountCommand);
@@ -66,7 +68,9 @@ final readonly class RegisterAccountController
         $this->commandBus->dispatchSync(
             RecordSuccessfulLoginCommand::fromUsernamePassword(
                 accountId: $createUsernamePasswordAccountCommand->id->toString(),
-                correlationId: Uuid::v7(), // todo get from request
+                correlationId: $correlationId,
+                dispatchedBy: $createUsernamePasswordAccountCommand->id->toString(),
+                causationId: $createUsernamePasswordAccountCommand->getCommandId(),
             ),
         );
 

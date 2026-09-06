@@ -21,13 +21,11 @@ final readonly class CreateUsernamePasswordAccountCommand extends AbstractComman
         public EmailAddress $emailAddress,
         public Username $username,
         public HashedPassword $hashedPassword,
-        private string $correlationId,
-        private string $causationId,
+        string $correlationId,
+        string $causationId,
+        string $dispatchedBy,
     ) {
-        parent::__construct(
-            $this->correlationId,
-            $this->causationId,
-        );
+        parent::__construct($correlationId, $causationId, $dispatchedBy);
     }
 
     public static function create(
@@ -36,16 +34,19 @@ final readonly class CreateUsernamePasswordAccountCommand extends AbstractComman
         string $emailAddress,
         string $hashedPassword,
         string $correlationId,
+        ?string $causationId = null,
+        ?string $dispatchedBy = null,
     ): self {
         return new self(
-            AccountAggregateId::fromNew(),
+            $accountId = AccountAggregateId::fromNew(),
             FirstName::fromString($firstName),
             LastName::fromString($lastName),
             EmailAddress::fromString($emailAddress),
             Username::fromString($emailAddress),
             HashedPassword::fromString($hashedPassword),
             correlationId: $correlationId,
-            causationId: $correlationId,
+            causationId: $causationId ?? $correlationId,
+            dispatchedBy: $dispatchedBy ?? $accountId->toString(),
         );
     }
 

@@ -20,6 +20,8 @@ interface DomainEvent
 
     public function getCausationId(): string;
 
+    public function getDispatchedBy(): string;
+
     /** @return mixed[] */
     public function serialize(): array;
 }
