@@ -14,6 +14,7 @@ final readonly class AccountEventFactory implements AggregateEventFactory
     {
         return match ($eventName) {
             AccountCreatedV1::EVENT_NAME => AccountCreatedV1::deserialize($eventPayload),
+            AccountLoginSucceededV1::EVENT_NAME => AccountLoginSucceededV1::deserialize($eventPayload),
             default => throw throw AggregateEventNotHandled::notHandledByEventFactory($eventName, self::class),
         };
     }

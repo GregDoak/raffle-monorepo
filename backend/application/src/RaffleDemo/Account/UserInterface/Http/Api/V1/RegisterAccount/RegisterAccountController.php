@@ -11,6 +11,7 @@ use App\Framework\UserInterface\Hal\HalSerializer;
 use App\Framework\UserInterface\OpenApi\ApiProblem\ProblemDetail\ValidationErrorResponse;
 use App\Framework\UserInterface\OpenApi\Hal\HalResponse;
 use App\RaffleDemo\Account\Application\Command\CreateUsernamePasswordAccount\CreateUsernamePasswordAccountCommand;
+use App\RaffleDemo\Account\Application\Command\RecordSuccessfulLogin\RecordSuccessfulLoginCommand;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,12 +53,19 @@ final readonly class RegisterAccountController
 
     public function __invoke(RegisterAccountRequest $request): HalJsonResponse
     {
+        $createUsernamePasswordAccountCommand = CreateUsernamePasswordAccountCommand::create(
+            firstName: $request->firstName,
+            lastName: $request->lastName,
+            emailAddress: $request->emailAddress,
+            hashedPassword: $request->hashedPassword,
+            correlationId: Uuid::v7(), // todo get from request
+        );
+
+        $this->commandBus->dispatchSync($createUsernamePasswordAccountCommand);
+
         $this->commandBus->dispatchSync(
-            CreateUsernamePasswordAccountCommand::create(
-                firstName: $request->firstName,
-                lastName: $request->lastName,
-                emailAddress: $request->emailAddress,
-                hashedPassword: $request->hashedPassword,
+            RecordSuccessfulLoginCommand::fromUsernamePassword(
+                accountId: $createUsernamePasswordAccountCommand->id->toString(),
                 correlationId: Uuid::v7(), // todo get from request
             ),
         );

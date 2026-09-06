@@ -60,7 +60,7 @@ final readonly class PostgresPersonalDataRepository implements PersonalDataRepos
 
         $statement = $this->connection->prepare($sql);
 
-        $statement->bindValue('id', $id);
+        $statement->bindValue('id', $id->toString());
 
         $record = $statement->executeQuery()->fetchAssociative();
 
